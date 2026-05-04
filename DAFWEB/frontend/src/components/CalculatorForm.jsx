@@ -23,6 +23,8 @@ export default function CalculatorForm({ onCompare }) {
     if (custos === "" || Number.isNaN(custosNum))
       e.custos = "Custos mensais obrigatórios.";
     else if (custosNum < 0) e.custos = "Custos não podem ser negativos.";
+    else if (!Number.isNaN(rendaNum) && custosNum > rendaNum)
+      e.custos = "Custos não podem ser maiores que a renda.";
 
     if (!profissao) e.profissao = "Profissão obrigatória.";
 

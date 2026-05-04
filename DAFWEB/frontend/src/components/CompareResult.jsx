@@ -43,7 +43,7 @@ export default function CompareResult({ result, onSendEmailNAF, onBack }) {
   }
 
   return (
-    <div className="card shadow-lg border-0 rounded-3 p-4">
+    <div id="resultado" className="card shadow-lg border-0 rounded-3 p-4">
       <h4 className="section-title">Resultado da Simulação</h4>
 
       {/* Informações de entrada */}
@@ -117,9 +117,7 @@ export default function CompareResult({ result, onSendEmailNAF, onBack }) {
         >
           {sending ? "Enviando..." : "Enviar ao NAF"}
         </button>
-        <button onClick={gerarPDF}>
-            Baixar PDF
-        </button>
+        <button onClick={() => gerarPDF("resultado")}>Baixar PDF</button>
       </div>
     </div>
   );

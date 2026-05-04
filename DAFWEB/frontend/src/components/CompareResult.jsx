@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import GraficoComparativo from "./GraficoComparativo";
+import { gerarPDF } from "../util/pdfGenerator";
 
 export default function CompareResult({ result, onSendEmailNAF, onBack }) {
   const [sending, setSending] = useState(false);
@@ -115,6 +116,9 @@ export default function CompareResult({ result, onSendEmailNAF, onBack }) {
           disabled={sending}
         >
           {sending ? "Enviando..." : "Enviar ao NAF"}
+        </button>
+        <button onClick={gerarPDF}>
+            Baixar PDF
         </button>
       </div>
     </div>

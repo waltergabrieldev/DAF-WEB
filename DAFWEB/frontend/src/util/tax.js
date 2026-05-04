@@ -1,3 +1,5 @@
+import { calcularAdvogadoPF, calcularAdvogadoPJ } from "../services/taxRules/advogado.js";
+
 // IRPF mensal - exemplo baseado em tabelas progressivas (valor mensal)
 export const IRPF_BRACKETS = [
   { upTo: 2428.8, rate: 0, deduction: 0 }, // faixa de isenção (exemplo; atualize conforme necessário)
@@ -114,4 +116,13 @@ export function compareTaxes({ rendaMensal, custosMensais }) {
       simples6: simples6PJ,
     },
   };
+}
+
+export function calcular(profissao, renda, custos){
+    if (profissao === 'advogado') {
+      return {
+        pf: calcularAdvogadoPF({renda}),
+        pj: calcularAdvogadoPJ({renda})
+      }
+    }
 }

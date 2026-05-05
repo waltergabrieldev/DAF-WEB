@@ -38,7 +38,7 @@ Git
 Prisma 5.10
 Setup Inicial
 1. Clonar repositório
-git clone https://github.com/lmatheus07/DAFWEB.git
+git clone https://github.com/waltergabrieldev/DAF-WEB
 2. Instalar dependências
 npm install
 3. Configurar variáveis de ambiente

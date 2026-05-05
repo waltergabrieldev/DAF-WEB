@@ -1,5 +1,5 @@
 import { createAdvogadoRule } from "./advogado.js";
-import { createPsicologoRule } from "./psicologo.js";
+import { createPsi_ArqtRule } from "./psi_arqt.js";
 
 function normalizeProfissao(profissao) {
   return (profissao ?? "").toString().trim().toLowerCase();
@@ -10,5 +10,5 @@ export function getTaxRule({ profissao, year = 2026 } = {}) {
 
   if (p.includes("advog")) return createAdvogadoRule({ year });
   // default (inclui "psicologo(a)" / "psicologo")
-  return createPsicologoRule({ year });
+  return createPsi_ArqtRule({ year });
 }

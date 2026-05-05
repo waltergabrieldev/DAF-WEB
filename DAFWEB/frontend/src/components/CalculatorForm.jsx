@@ -126,6 +126,7 @@ export default function CalculatorForm({ onCompare }) {
               onChange={(e) => setProfissao(e.target.value)}
             >
               <option>Psicólogo(a)</option>
+              <option>Arquiteto(a)</option>
               <option >Advogado(a)</option>
             </select>
           </td>

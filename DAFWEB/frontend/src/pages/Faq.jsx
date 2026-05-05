@@ -54,7 +54,10 @@ export default function FAQ() {
         fontFamily: "Arial",
       }}
     >
-      <h1 style={{ textAlign: "center", marginBottom: "30px" }}>
+      <h1
+        className="fw-bold"
+        style={{ textAlign: "center", marginBottom: "45px", color: "white" }}
+      >
         Perguntas Frequentes (FAQ)
       </h1>
 
@@ -65,7 +68,7 @@ export default function FAQ() {
             marginBottom: "12px",
             borderRadius: "8px",
             overflow: "hidden",
-            border: "1px solid #ddd",
+            border: "1px solid #e2dbdb",
           }}
         >
           <div

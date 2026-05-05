@@ -1,5 +1,5 @@
 import { getTaxRule } from "../services/taxRules/index.js";
-export { calcIRPF, calcSimples, round2, IRPF_BRACKETS_2026, SIMPLES_ANEXO_III } from "./taxCore.js";
+export { round2 } from "./taxCore.js";
 
 /**
  * Função principal que retorna o comparativo PF x PJ

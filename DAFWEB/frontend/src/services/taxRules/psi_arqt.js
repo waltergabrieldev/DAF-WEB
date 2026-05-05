@@ -1,19 +1,19 @@
-import advogado2026 from "./2026/adv_pj.json";
-import pf2026 from "./2026/pf.json"
-import {buildIRFunction} from "./pf.js"
+import psi_arqt2026 from "./2026/psi_arqt_pj.json";
+import pf2026 from "./2026/pf.json";
+import { buildIRFunction } from "./pf.js";
 import { round2 } from "../../util/taxCore.js";
 
 
 
 const calcIR2026 = buildIRFunction(pf2026.pf);
 
-export function createAdvogadoRule({ year = 2026 } = {}) {
+export function createPsi_ArqtRule({ year = 2026 } = {}) {
   if (year !== 2026) {
-    throw new Error(`Regra de advogado não disponi­vel para o ano ${year}.`);
+    throw new Error(`Regra de psicologo não disponi­vel para o ano ${year}.`);
   }
 
   return {
-    id: "advogado",
+    id: "psi_arqt",
     year,
     compare({ rendaMensal, custosMensais, profissao }) {
       const safeRenda = Math.max(0, Number(rendaMensal) || 0);
@@ -36,12 +36,11 @@ export function createAdvogadoRule({ year = 2026 } = {}) {
       };
 
       // PJ (config simples)
-      const dasRate = Number(advogado2026.pj.das) || 0;
+      const dasRate = Number(psi_arqt2026.pj.das) || 0;
       const DAS = round2(safeRenda * dasRate);
-      const proLabore = Math.max(Number(advogado2026.pj.proLaboreMin) || 0, safeRenda * 0.1);
-      const inss = round2(proLabore * (Number(advogado2026.pj.inss) || 0));
-      const inssPatronal = round2(proLabore * (Number(advogado2026.pj.inssPatronal) || 0));
-      const totalImpostos = round2(DAS + inss + inssPatronal);
+      const proLabore = Math.max(Number(psi_arqt2026.pj.proLaboreMin) || 0, safeRenda * 0.11);
+      const inss = round2(proLabore * (Number(psi_arqt2026.pj.inss) || 0));
+      const totalImpostos = round2(DAS + inss);
 
       const pj = {
         faturamento: safeRenda,
@@ -54,7 +53,6 @@ export function createAdvogadoRule({ year = 2026 } = {}) {
         totalImpostos,
         effectiveRate,
         liquido: round2(safeRenda - totalImpostos),
-        faixa: null,
       };
 
       return {

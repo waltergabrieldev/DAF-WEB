@@ -15,7 +15,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 export default function GraficoComparativo({ PF, PJ }) {
   const data = {
     labels: [
-      "Simples Nacional (6%)",
+      "Simples Nacional",
       "INSS",
       "Imposto de Renda",
       "Total de Impostos",
@@ -37,7 +37,7 @@ export default function GraficoComparativo({ PF, PJ }) {
         label: "PJ",
         backgroundColor: "#a6b1ff",
         data: [
-          PJ.simples6 ?? 0,
+          PJ.das?? 0,
           PJ.inss ?? 0,
           PJ.ir ?? 0,
           PJ.totalImpostos ?? 0,

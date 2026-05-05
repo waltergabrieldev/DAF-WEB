@@ -37,7 +37,7 @@ export const sendComparisonToNAF = async (req, res) => {
         <li><strong>Base de Cálculo:</strong> R$ ${PF.base.toFixed(2)}</li>
         <li><strong>Imposto Due (mensal):</strong> R$ ${PF.imposto.toFixed(2)}</li>
         <li><strong>Renda Líquida:</strong> R$ ${PF.liquido.toFixed(2)}</li>
-        <li><strong>Alíquota Efetiva:</strong> ${(PF.effectiveRate * 100).toFixed(2)}%</li>
+        <li><strong>Alíquota Efetiva:</strong> ${(PF.effectiveRate).toFixed(2)}%</li>
       </ul>
 
       <h3>Pessoa Jurídica (PJ) — Simples Nacional</h3>
@@ -49,7 +49,7 @@ export const sendComparisonToNAF = async (req, res) => {
         <li><strong>IR sobre Pró-labore:</strong> R$ ${PJ.irProlabore.imposto.toFixed(2)}</li>
         <li><strong>Total de Impostos:</strong> R$ ${PJ.totalImpostos.toFixed(2)}</li>
         <li><strong>Renda Líquida:</strong> R$ ${PJ.liquido.toFixed(2)}</li>
-        <li><strong>Alíquota Efetiva Total:</strong> ${(PJ.effectiveRate * 100).toFixed(2)}%</li>
+        <li><strong>Alíquota Efetiva Total:</strong> ${(PJ.effectiveRate).toFixed(2)}%</li>
       </ul>
 
       <h3>JSON Completo</h3>

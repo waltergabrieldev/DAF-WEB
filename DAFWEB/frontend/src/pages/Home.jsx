@@ -54,12 +54,23 @@ export default function Home() {
           <h1 className="fw-bold mb-0">Calculadora Tributária</h1>
           <p className="mb-0">Compare PF vs PJ de forma simples</p>
         </div>
-        <button
-          onClick={handleLogout}
-          className="btn btn-light fw-bold rounded-pill px-4"
-        >
-          Sair
-        </button>
+        <div className="d-flex gap-2">
+          <Link to="/faq">
+            <button
+              className="btn btn-outline-light fw-bold rounded-pill px-4"
+              type="button"
+            >
+              FAQ
+            </button>
+          </Link>
+          <button
+            onClick={handleLogout}
+            className="btn btn-light fw-bold rounded-pill px-4"
+            type="button"
+          >
+            Sair
+          </button>
+        </div>
       </div>
 
       <div className="container">
@@ -71,18 +82,9 @@ export default function Home() {
               <CompareResult result={result} onBack={handleBack} />
             )}
           </div>
+
         </div>
       </div>
     </div>
   );
-
-  <Link to="/faq">
-    <button style={{
-        padding: "10px 20px",
-        marginTop: "20px",
-        cursor: "pointer"
-    }}>
-        Ver FAQ
-    </button>
-  </Link>
 }

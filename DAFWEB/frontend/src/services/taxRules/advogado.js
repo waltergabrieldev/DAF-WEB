@@ -23,14 +23,14 @@ export function createAdvogadoRule({ year = 2026 } = {}) {
       const desconto = Number(pf2026.pf.descontoSimplificado) || 0;
       const baseCalculoPF = safeRenda - desconto;
       const irPF = calcIR2026(baseCalculoPF, safeRenda);
-      const effectiveRate = (totalImpostos / safeRenda) * 100
+      const effectiveRatepf = (irPF/ safeRenda) * 100
 
       const pf = {
         inss: 0,
         ir: irPF,
         isentoIR: irPF === 0,
         imposto: round2(irPF),
-        effectiveRate,
+        effectiveRate: effectiveRatepf,
         liquido: round2(safeRenda - irPF),
         bracket: null,
       };
@@ -42,6 +42,7 @@ export function createAdvogadoRule({ year = 2026 } = {}) {
       const inss = round2(proLabore * (Number(advogado2026.pj.inss) || 0));
       const inssPatronal = round2(proLabore * (Number(advogado2026.pj.inssPatronal) || 0));
       const totalImpostos = round2(DAS + inss + inssPatronal);
+      const effectiveRatepj = (totalImpostos/ safeRenda) * 100
 
       const pj = {
         faturamento: safeRenda,
@@ -51,8 +52,8 @@ export function createAdvogadoRule({ year = 2026 } = {}) {
         irProlabore: null,
         ir: 0,
         isentoIR: true,
-        totalImpostos,
-        effectiveRate,
+        totalImpostos: totalImpostos,
+        effectiveRate: effectiveRatepj,
         liquido: round2(safeRenda - totalImpostos),
         faixa: null,
       };

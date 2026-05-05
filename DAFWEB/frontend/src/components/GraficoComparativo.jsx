@@ -37,7 +37,7 @@ export default function GraficoComparativo({ PF, PJ }) {
         label: "PJ",
         backgroundColor: "#a6b1ff",
         data: [
-          PJ.das?? 0,
+          PJ.impostoMensal ?? 0,
           PJ.inss ?? 0,
           PJ.ir ?? 0,
           PJ.totalImpostos ?? 0,

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import CalculatorForm from "../components/CalculatorForm";
 import CompareResult from "../components/CompareResult";
 import { compareTaxes } from "../util/tax";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   const [result, setResult] = useState(null);
@@ -74,4 +75,14 @@ export default function Home() {
       </div>
     </div>
   );
+
+  <Link to="/faq">
+    <button style={{
+        padding: "10px 20px",
+        marginTop: "20px",
+        cursor: "pointer"
+    }}>
+        Ver FAQ
+    </button>
+  </Link>
 }

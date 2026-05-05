@@ -15,6 +15,12 @@ export const gerarPDF = async (elementId = 'resultado') => {
             useCORS: true,
             scrollX: 0,
             scrollY: -window.scrollY,
+            ignoreElements: (el) => {
+                if (!el) return false
+                if (el.dataset?.pdfIgnore === 'true') return true
+                if (el.classList?.contains('pdf-ignore')) return true
+                return false
+            },
         })
 
         const img = canvas.toDataURL('image/png')

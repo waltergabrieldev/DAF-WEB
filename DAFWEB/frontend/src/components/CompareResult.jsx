@@ -102,7 +102,7 @@ export default function CompareResult({ result, onSendEmailNAF, onBack }) {
       <GraficoComparativo PF={PF} PJ={PJ} />
       <hr />
 
-      <div className="d-flex justify-content-between mt-4">
+      <div className="d-flex justify-content-between mt-4" data-pdf-ignore="true">
         <button
           className="btn btn-secondary rounded-pill px-4"
           onClick={onBack}
@@ -117,7 +117,7 @@ export default function CompareResult({ result, onSendEmailNAF, onBack }) {
         >
           {sending ? "Enviando..." : "Enviar ao NAF"}
         </button>
-        <button onClick={() => gerarPDF("resultado")}>Baixar PDF</button>
+        <button onClick={() => gerarPDF("resultado")} className="btn btn-secondary rounded-pill px-4">Baixar PDF</button>
       </div>
     </div>
   );

@@ -11,9 +11,9 @@ function buildIRFunction({ tabelaIR, reducao }) {
   const hasFormula = Boolean(reducao?.formula);
   let formulaFn = null;
   if (hasFormula) {
-    // Permite apenas nÃºmeros, renda e operadores bÃ¡sicos
+    // Permite apenas números, renda e operadores básicos
     const safeExpr = String(reducao.formula).replace(/[^0-9renda+*/().\s-]/gi, "");
-    // eslint-disable-next-line no-new-func
+    
     formulaFn = new Function("renda", `return ${safeExpr};`);
   }
 
@@ -51,7 +51,7 @@ const calcIR2026 = buildIRFunction(advogado2026.pf);
 
 export function createAdvogadoRule({ year = 2026 } = {}) {
   if (year !== 2026) {
-    throw new Error(`Regra de advogado nÃ£o disponÃ­vel para o ano ${year}.`);
+    throw new Error(`Regra de advogado não disponi­vel para o ano ${year}.`);
   }
 
   return {

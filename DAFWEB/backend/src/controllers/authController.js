@@ -1,38 +1,54 @@
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import { User } from '../models/User.js';
+
+const createToken = (user) => {
+  return jwt.sign(
+    { id: user.id, email: user.email },
+    process.env.JWT_SECRET,
+    { expiresIn: process.env.JWT_EXPIRES_IN || '1d' }
+  );
+};
+
+const publicUser = (user) => ({
+  id: user.id,
+  email: user.email,
+  created_at: user.created_at,
+});
 
 export const register = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Validação básica
     if (!email || !password) {
-      return res.status(400).json({ error: 'Email e senha são obrigatórios' });
+      return res.status(400).json({ error: 'Email e senha sao obrigatorios' });
+    }
+
+    if (!process.env.JWT_SECRET) {
+      return res.status(500).json({ error: 'JWT_SECRET nao configurado no servidor' });
     }
 
     if (password.length < 6) {
-      return res.status(400).json({ error: 'Senha deve ter no mínimo 6 caracteres' });
+      return res.status(400).json({ error: 'Senha deve ter no minimo 6 caracteres' });
     }
 
-    // Verificar se usuário já existe
     const existingUser = await User.findByEmail(email);
     if (existingUser) {
-      return res.status(409).json({ error: 'Email já cadastrado' });
+      return res.status(409).json({ error: 'Email ja cadastrado' });
     }
 
-    // Hash da senha
     const passwordHash = await bcrypt.hash(password, 10);
-
-    // Criar usuário
     const newUser = await User.create(email, passwordHash);
+    const token = createToken(newUser);
 
     res.status(201).json({
-      message: 'Usuário criado com sucesso',
-      user: { id: newUser.id, email: newUser.email },
+      message: 'Usuario criado com sucesso',
+      token,
+      user: publicUser(newUser),
     });
   } catch (err) {
     console.error('Erro no registro:', err);
-    res.status(500).json({ error: 'Erro ao registrar usuário' });
+    res.status(500).json({ error: 'Erro ao registrar usuario' });
   }
 };
 
@@ -40,26 +56,30 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Validação básica
     if (!email || !password) {
-      return res.status(400).json({ error: 'Email e senha são obrigatórios' });
+      return res.status(400).json({ error: 'Email e senha sao obrigatorios' });
     }
 
-    // Buscar usuário
+    if (!process.env.JWT_SECRET) {
+      return res.status(500).json({ error: 'JWT_SECRET nao configurado no servidor' });
+    }
+
     const user = await User.findByEmail(email);
     if (!user) {
-      return res.status(401).json({ error: 'Email ou senha inválidos' });
+      return res.status(401).json({ error: 'Email ou senha invalidos' });
     }
 
-    // Verificar senha
     const passwordMatch = await bcrypt.compare(password, user.password_hash);
     if (!passwordMatch) {
-      return res.status(401).json({ error: 'Email ou senha inválidos' });
+      return res.status(401).json({ error: 'Email ou senha invalidos' });
     }
+
+    const token = createToken(user);
 
     res.json({
       message: 'Login realizado com sucesso',
-      user: { id: user.id, email: user.email },
+      token,
+      user: publicUser(user),
     });
   } catch (err) {
     console.error('Erro no login:', err);
@@ -71,7 +91,7 @@ export const getProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
     if (!user) {
-      return res.status(404).json({ error: 'Usuário não encontrado' });
+      return res.status(404).json({ error: 'Usuario nao encontrado' });
     }
     res.json({ user });
   } catch (err) {

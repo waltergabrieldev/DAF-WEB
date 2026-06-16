@@ -9,7 +9,11 @@ export default function Home() {
   const [result, setResult] = useState(null);
   const navigate = useNavigate();
 
-  const handleLogout = () => navigate("/login");
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
 
   function handleCompare(data) {
     const comparison = compareTaxes({

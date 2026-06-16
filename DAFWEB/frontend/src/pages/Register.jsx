@@ -1,14 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+import api from "../config";
 
 export default function Register() {
-  const api = axios.create({
-    baseURL: "http://localhost:5000/auth",
-    timeout: 1000,
-    headers: { "X-Custom-Header": "foobar" },
-  });
-
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -16,6 +10,7 @@ export default function Register() {
     confirmPassword: "",
   });
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -38,23 +33,26 @@ export default function Register() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      api
-        .post("/register", {
+    if (!validateForm()) return;
+
+    try {
+      setIsSubmitting(true);
+      const { data } = await api.post("/auth/register", {
           email: formData.email,
           password: formData.password,
-        })
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      });
 
-      console.log("Registro:", formData);
-      navigate("/login");
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      navigate("/home");
+    } catch (error) {
+      setErrors({
+        form: error.response?.data?.error || "Nao foi possivel criar a conta",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -77,6 +75,8 @@ export default function Register() {
       >
         <h2 className="text-center mb-4 fw-bold">Registro</h2>
         <form onSubmit={handleSubmit}>
+          {errors.form && <div className="alert alert-danger">{errors.form}</div>}
+
           <div className="mb-3">
             <label className="form-label">Nome:</label>
             <input
@@ -131,8 +131,9 @@ export default function Register() {
               type="submit"
               className="btn fw-bold rounded-pill"
               style={{ backgroundColor: "#6a5acd", color: "white" }}
+              disabled={isSubmitting}
             >
-              Registrar
+              {isSubmitting ? "Registrando..." : "Registrar"}
             </button>
           </div>
         </form>

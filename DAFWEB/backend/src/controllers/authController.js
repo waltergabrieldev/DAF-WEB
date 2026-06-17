@@ -1,35 +1,32 @@
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 import { User } from '../models/User.js';
-
-const createToken = (user) => {
-  return jwt.sign(
-    { id: user.id, email: user.email },
-    process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES_IN || '1d' }
-  );
-};
+import {
+  comparePassword,
+  createToken,
+  hashPassword,
+  normalizeEmail,
+  validateEmail,
+  validateName,
+  validatePassword,
+} from '../services/authService.js';
 
 const publicUser = (user) => ({
   id: user.id,
+  nome: user.nome,
+  name: user.nome,
   email: user.email,
-  created_at: user.created_at,
+  data_criacao: user.data_criacao,
+  created_at: user.data_criacao,
 });
 
 export const register = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const nome = String(req.body.nome || req.body.name || '').trim();
+    const email = normalizeEmail(req.body.email);
+    const { password } = req.body;
 
-    if (!email || !password) {
-      return res.status(400).json({ error: 'Email e senha sao obrigatorios' });
-    }
-
-    if (!process.env.JWT_SECRET) {
-      return res.status(500).json({ error: 'JWT_SECRET nao configurado no servidor' });
-    }
-
-    if (password.length < 6) {
-      return res.status(400).json({ error: 'Senha deve ter no minimo 6 caracteres' });
+    const validationError = validateName(nome) || validateEmail(email) || validatePassword(password);
+    if (validationError) {
+      return res.status(400).json({ error: validationError });
     }
 
     const existingUser = await User.findByEmail(email);
@@ -37,8 +34,8 @@ export const register = async (req, res) => {
       return res.status(409).json({ error: 'Email ja cadastrado' });
     }
 
-    const passwordHash = await bcrypt.hash(password, 10);
-    const newUser = await User.create(email, passwordHash);
+    const senhaHash = await hashPassword(password);
+    const newUser = await User.create({ nome, email, senhaHash });
     const token = createToken(newUser);
 
     res.status(201).json({
@@ -54,14 +51,12 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const email = normalizeEmail(req.body.email);
+    const { password } = req.body;
 
-    if (!email || !password) {
-      return res.status(400).json({ error: 'Email e senha sao obrigatorios' });
-    }
-
-    if (!process.env.JWT_SECRET) {
-      return res.status(500).json({ error: 'JWT_SECRET nao configurado no servidor' });
+    const validationError = validateEmail(email) || (!password ? 'Senha e obrigatoria' : null);
+    if (validationError) {
+      return res.status(400).json({ error: validationError });
     }
 
     const user = await User.findByEmail(email);
@@ -69,7 +64,7 @@ export const login = async (req, res) => {
       return res.status(401).json({ error: 'Email ou senha invalidos' });
     }
 
-    const passwordMatch = await bcrypt.compare(password, user.password_hash);
+    const passwordMatch = await comparePassword(password, user.senha_hash);
     if (!passwordMatch) {
       return res.status(401).json({ error: 'Email ou senha invalidos' });
     }

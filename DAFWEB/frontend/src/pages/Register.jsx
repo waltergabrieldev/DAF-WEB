@@ -40,6 +40,7 @@ export default function Register() {
     try {
       setIsSubmitting(true);
       const { data } = await api.post("/auth/register", {
+          nome: formData.name,
           email: formData.email,
           password: formData.password,
       });

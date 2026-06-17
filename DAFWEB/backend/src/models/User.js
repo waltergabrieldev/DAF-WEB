@@ -1,16 +1,18 @@
 import prisma from '../prismaClient.js';
 
 export const User = {
-  async create(email, passwordHash) {
+  async create({ nome, email, senhaHash }) {
     return prisma.users.create({
       data: {
+        nome,
         email,
-        password_hash: passwordHash,
+        senha_hash: senhaHash,
       },
       select: {
         id: true,
+        nome: true,
         email: true,
-        created_at: true,
+        data_criacao: true,
       },
     });
   },
@@ -26,8 +28,9 @@ export const User = {
       where: { id: Number(id) },
       select: {
         id: true,
+        nome: true,
         email: true,
-        created_at: true,
+        data_criacao: true,
       },
     });
   },

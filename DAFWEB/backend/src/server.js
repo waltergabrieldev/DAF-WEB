@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes.js';
 import emailRoutes from './routes/emailRoutes.js';  
+import historyRoutes from './routes/historyRoutes.js';
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.get('/health', (req, res) => {
 // Rotas
 app.use('/auth', authRoutes);
 app.use('/email', emailRoutes);
+app.use('/history', historyRoutes);
 
 
 // Tratamento de rotas não encontradas
